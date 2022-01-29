@@ -1,0 +1,57 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - '*'
+# more info on 'workflow triggers'
+# https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onpushpull_requestbranchestags
+
+
+
+jobs:
+  # ================================================== #
+  #
+  # test
+  #
+  test:
+#    runs-on: ubuntu-latest
+    runs-on: [self-hosted, macos]
+    steps:
+      # Setup checkout
+      - uses: actions/checkout@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install system dependencies
+        run: brew install jq
+      # Setup the flutter environment
+      - uses: subosito/flutter-action@v2
+        with:
+          # channel: 'stable' # 'dev', 'alpha', default to: 'stable'
+          flutter-version: '2.8.1'
+
+      - name: Create TEST .env
+        run: cp assets/env/.env.test assets/env/.env
+
+      # Get flutter dependencies
+      - name: Get dependencies
+        run: flutter pub get
+
+      # Run widget tests for our flutter project
+      - name: Run tests
+        run: flutter test --coverage
+
+      # Install lcov
+      - name: Install lcov
+        run: brew install lcov
+
+      # Remove generated files
+      - name: Remove generated files
+        run: lcov --remove coverage/lcov.info 'lib/*/*.freezed.dart' 'lib/*/*.g.dart' 'lib/*/*.part.dart' 'lib/generated/*.dart' 'lib/generated/*/*.dart' -o coverage/lcov.info
+
+      # Upload to CodeCov
+      - name: Upload to CodeCov
+        uses: codecov/codecov-action@v1.2.1
+        with:
+          file: coverage/lcov.info
+          token: ${{ secrets.CODECOV_TOKEN }}

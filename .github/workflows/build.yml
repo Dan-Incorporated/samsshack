@@ -1,0 +1,137 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - '*'
+# more info on 'workflow triggers'
+# https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onpushpull_requestbranchestags
+
+
+
+jobs:
+  # ================================================== #
+  #
+  # build web
+  #
+  build:
+    name: Build Web
+#    runs-on: ubuntu-latest
+    runs-on: [self-hosted, macos]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install system dependencies
+        run: brew install jq
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '2.8.1'
+
+      - name: Create PRODUCTION .env
+        run: cp assets/env/.env.prod assets/env/.env
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build project
+        run: flutter build web --release --source-maps
+
+      - name: Upload web artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: web-build
+          path: ./build/web
+
+#  # ================================================== #
+#  #
+#  # build android
+#  #
+#  build-android:
+#    runs-on: ubuntu-latest
+#    steps:
+#      # Setup checkout
+#      - uses: actions/checkout@v2
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#
+#      # Setup keystore
+#      - name: Setup Android keystore
+#        id: android_keystore
+#        uses: timheuer/base64-to-file@v1.0.3
+#        with:
+#          fileName: key.jks
+#          encodedString: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+#
+#      # Create keystore properties
+#      - name: Create key.properties
+#        run: |
+#          echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" > android/key.properties
+#          echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/key.properties
+#          echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/key.properties
+#          echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
+#
+#      # Setup Java environment in order to build Flutter environment
+#      - uses: actions/setup-java@v2
+#        with:
+#          distribution: 'zulu' # See 'Supported distributions' for available options
+#          java-version: '11'
+#
+#      # Setup the flutter environment
+#      - uses: subosito/flutter-action@v1
+#        with:
+#          flutter-version: '2.8.1'
+#
+#      # Cleanup
+#      - run: flutter clean
+#
+#      # Get flutter dependencies
+#      - run: flutter pub get
+#
+#      # Build app bundle
+#      - run: flutter build appbundle
+#
+#      # Upload generated app bundle to the artifacts
+#      - uses: actions/upload-artifact@v2
+#        with:
+#          name: appbundle
+#          path: build/app/outputs/bundle/release/app-release.aab
+#          retention-days: 3
+#
+#
+#
+#  # ================================================== #
+#  #
+#  # build ios
+#  #
+#  build-ios:
+#    runs-on: macOS-latest
+#    steps:
+#      # Setup checkout
+#      - uses: actions/checkout@v2
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#
+#      # Setup the flutter environment.
+#      - uses: subosito/flutter-action@v1
+#        with:
+#          flutter-version: '2.8.1'
+#
+#      # Cleanup
+#      - run: flutter clean
+#
+#      # Get flutter dependencies
+#      - run: flutter pub get
+#
+#      # Build ios app
+#      - run: flutter build ios --release --no-codesign
+#
+#      # Upload generated app bundle to the artifacts
+#      - uses: actions/upload-artifact@v2
+#        with:
+#          name: ios-build
+#          path: build/ios/iphoneos
+#          retention-days: 3
+#

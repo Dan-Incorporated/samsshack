@@ -1,0 +1,79 @@
+name: Deploy - Web Production
+
+on:
+  workflow_dispatch:
+    branches:
+      - 'master'
+    tags:
+      - v1.*
+
+jobs:
+  # ================================================== #
+  #
+  # build
+  #
+  build:
+    #    runs-on: ubuntu-latest
+    runs-on: [self-hosted, macos]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install system dependencies
+        run: brew install jq
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '2.8.1'
+
+      - name: Clean Flutter environment
+        run: flutter clean
+
+      - name: Create PRODUCTION .env
+        run: cp assets/env/.env.prod assets/env/.env
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build release project
+        run: flutter build web --release --source-maps
+
+      - name: Upload production-ready build files
+        uses: actions/upload-artifact@v2
+        with:
+          name: production-files
+          path: ./build/web
+
+  # ================================================== #
+  #
+  # deploy
+  #
+  deploy:
+    needs: build
+    #    runs-on: ubuntu-latest
+    runs-on: [self-hosted, macos]
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: production-files
+          path: ./build/web
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build/web
+
+      - name: Generate version label from date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d__%s')"
+
+      - name: Create release in GitHub
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "production-files"
+          tag: release-${{ steps.date.outputs.date }}
+          token: ${{ secrets.GITHUB_TOKEN }}

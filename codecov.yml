@@ -1,0 +1,29 @@
+ignore:
+  # assets
+  - fonts/*
+  - assets/*
+  # generated platform folders
+  - android/*
+  - ios/*
+  - web/*
+  - build/*
+  # test folders
+  - test/*
+  - test-resources/*
+  # Flutter config
+  - analysis_options.yml
+  - pubspec.yaml
+  - pubspec.lock
+  - .flutter-plugins
+  - .flutter-plugins-dependencies
+  - .packages
+  - lib/generated_plugin_registrant.dart
+  # misc
+  - .gitignore
+  - CHANGELOG.md
+  - README.md
+  - readme.example.md
+  - changelog.example.md
+  - .fvm/*
+  - .github/*
+  - scripts/*
