@@ -26,7 +26,7 @@ final Color colorGreen = Colors.green[400]!;
 final Color colorRed = Colors.red[400]!;
 final Color colorYellow = Colors.yellow[800]!;
 final Color colorGrey = Colors.grey[500]!;
-final Color colorSecondary = Colors.cyan[400]!;
+final Color colorSecondary = Colors.orangeAccent[400]!;
 
 // FONT
 const String fontFamilyDefault = 'Pacifico';
@@ -34,10 +34,10 @@ const String fontFamilyDefault = 'Pacifico';
 // light theme
 ThemeData themeLight = ThemeData(
   brightness: Brightness.light,
-  primaryColor: Colors.purple[700],
-  primaryColorLight: Colors.purple[200],
-  primaryColorDark: Colors.purple[900],
-  splashColor: Colors.purple[100],
+  primaryColor: Colors.blue[700],
+  primaryColorLight: Colors.blue[200],
+  primaryColorDark: Colors.blue[900],
+  splashColor: Colors.blue[100],
   visualDensity: VisualDensity.adaptivePlatformDensity,
   fontFamily: fontFamilyDefault,
 );
