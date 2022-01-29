@@ -1,6 +1,9 @@
 # SETUP for Sams Shack
+
 #### By: [Daniel Nazarian](https://danielnazarian) 🐧👹
+
 ##### Contact me at <dnaz@danielnazarian.com>
+
 ##### Created using [Daniel's Flutter Bootstrapper](https://github.com/dan1229/samsshack)
 
 -------------------------------------------------------
@@ -23,11 +26,6 @@
    description.
 7. Web hosting - more information below.
 
-
-
-
-
-
 ## App Icons / Favicons
 
 For mobile app icons for iOS and Android follow the instructions in `pubspec.yaml`.
@@ -38,17 +36,14 @@ a high resolution, square version of the image you would like to use as the favi
 Download the ZIP file of icons that the site generates for you and paste them in the `web/icons`
 directory.
 
-While updating the `web/icons` directory will do a majority of the work for favicons, you should check/update
+While updating the `web/icons` directory will do a majority of the work for favicons, you should
+check/update
 `web/index.html` as well to ensure it's accurate for your project.
-
-
-
-
-
 
 ## Web Hosting
 
 Options:
+
 - GitHub Pages
 - S3 (COMING)
 
@@ -56,8 +51,12 @@ Options:
 
 **Prerequisite:** to use GitHub as your VCS you must have the [GitHub CLI](https://cli.github.com/)
 installed To deploy to `GitHub Pages` you will need to do some manual config in the repo settings to
-activate it first. You will also need to update the 'base href' in `web/index.html` to include the
-repo name. This is to ensure paths work with the non-root path GH Pages provides.
+activate it first.
+
+To activate GitHub Pages you will need to wait a few minutes for GitHub to do its thing then go to
+the repo settings. Select the `gh-pages` branch as your source (`/root` as the directory.)
+You will also need to update the 'base href' in `web/index.html` to include the repo name. This is
+to ensure paths work with the non-root path GH Pages provides.
 
 NOTE: `GitHub Pages` handles SPAs weirdly - primarily in that it won't redirect 404s to your
 application. This is problematic for routing properly to your application. If this is the desired
@@ -69,19 +68,17 @@ application with the proper path (i.e., /about -> /#/about).
 
 COMING
 
-
-
-
-
 ## CI/CD
 
 ### GitHub Runners
 
-You should try to switch from GitHub hosted runners to self-hosted runners ASAP. This is accessible via the repo settings in GitHub.
+You should try to switch from GitHub hosted runners to self-hosted runners ASAP. This is accessible
+via the repo settings in GitHub.
 
-If your project is in an organization (i.e., [Dan Incorporated](https://github.com/Dan-Incorporated)) just use the org's runners if possible. Otherwise,
-projects will default to GitHub shared runners. To switch visit the `.github/workflows/` directory and switch "self-hosted" with "ubuntu-latest" or vice versa.
-
+If your project is in an organization (
+i.e., [Dan Incorporated](https://github.com/Dan-Incorporated)) just use the org's runners if
+possible. Otherwise, projects will default to GitHub shared runners. To switch visit
+the `.github/workflows/` directory and switch "self-hosted" with "ubuntu-latest" or vice versa.
 
 ### CI - builds and tests
 
@@ -98,12 +95,12 @@ You will most likely need to do some work to sign the Android builds in CI
 #### Code Coverage (CodeCov)
 
 To get code coverage (and the badge) working properly, you must take a few extra steps.
-1. Add the repo to your [CodeCov account](https://app.codecov.io/gh/) and activate it in the settings.
+
+1. Add the repo to your [CodeCov account](https://app.codecov.io/gh/) and activate it in the
+   settings.
 2. Once added, add the `Repository Upload Token` to GitHub secrets and name it `CODECOV_TOKEN`.
 3. Go to the `badges` section of the settings to get your coverage badge markdown.
 4. Next time your CI pipeline runs, it should auto upload to CodeCov and populate your badge(s).
-
-
 
 ### CD
 
@@ -125,10 +122,11 @@ Android and iOS. It also supports plugins for all sorts of useful features like 
 screenshots and similar.
 
 **Note: CI/CD for iOS in particular can be very expensive - the cheapest route is to install a
-GitHub Runner
-on a mac you own and use that device for builds/releases.**
+GitHub Runner on a mac you own and use that device for builds/releases.**
 
 
 -------------------------------------------------------
+
 ##### [https://danielnazarian.com](https://danielnazarian.com)
+
 ##### Copyright 2021 © Daniel Nazarian.
