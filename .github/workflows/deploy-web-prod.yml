@@ -13,8 +13,8 @@ jobs:
   # build
   #
   build:
-    #    runs-on: ubuntu-latest
-    runs-on: [self-hosted, macos]
+        runs-on: ubuntu-latest
+#    runs-on: [self-hosted, macos]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -51,8 +51,8 @@ jobs:
   #
   deploy:
     needs: build
-    #    runs-on: ubuntu-latest
-    runs-on: [self-hosted, macos]
+        runs-on: ubuntu-latest
+#    runs-on: [self-hosted, macos]
     if: github.ref == 'refs/heads/master'
     steps:
       - name: Download artifact
