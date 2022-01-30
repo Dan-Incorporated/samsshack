@@ -74,6 +74,6 @@ jobs:
       - name: Create release in GitHub
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "production-files"
+          artifacts: production-files
           tag: release-${{ steps.date.outputs.date }}
           token: ${{ secrets.GITHUB_TOKEN }}
